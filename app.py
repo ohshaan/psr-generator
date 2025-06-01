@@ -374,9 +374,9 @@ if sel:
         report = generate_psr_report(dfp, tpl_bytes)
         safe = ''.join(c for c in proj if c.isalnum() or c in (' ', '_', '-')).rstrip()
         st.download_button(
-            'Download Report',
-            data=report,
-            file_name=f"{safe}_{datetime.now():%Y%m%d}.docx",
+            label='Download Report',
+            data=report.getvalue(),
+            file_name=f"Project Status Report_{safe}_{datetime.now():%Y%m%d}.docx",
             mime='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
     else:
@@ -389,11 +389,11 @@ if sel:
                     report_cache[proj] = generate_psr_report(dfp, tpl_bytes)
                 report = report_cache[proj]
                 safe = ''.join(c for c in proj if c.isalnum() or c in (' ', '_', '-')).rstrip()
-                zf.writestr(f"{safe}_{datetime.now():%Y%m%d}.docx", report.read())
+                zf.writestr(f"{safe}_{datetime.now():%Y%m%d}.docx", report.getvalue())
         buf.seek(0)
         st.download_button(
-            'Download ZIP of Reports',
-            data=buf,
+            label='Download ZIP of Reports',
+            data=buf.getvalue(),
             file_name=f"PSR_{datetime.now():%Y%m%d_%H%M%S}.zip",
             mime='application/zip'
         )
