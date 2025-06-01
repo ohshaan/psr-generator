@@ -297,14 +297,13 @@ def generate_psr_report(df_proj, tpl_bytes):
     }
     doc = Document(BytesIO(tpl_bytes))
     doc = replace_placeholders_preserve_format(doc, mapping)
-    doc = set_footer_for_all_sections(doc, mapping['Footer'])  # <-- Ensures footer is always set
+    # (Do NOT call set_footer_for_all_sections here!)
     grouped = group_activities(df_proj)
     doc = insert_grouped_activities(doc, grouped)
     out = BytesIO()
     doc.save(out)
     out.seek(0)
     return out
-
 
 # ---------- Streamlit UI ----------
 
