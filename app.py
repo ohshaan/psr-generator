@@ -262,9 +262,9 @@ def insert_grouped_activities(doc, grouped):
     return doc
 
 
-def get_footer(project_name, _):
-    return project_name
-
+def get_footer(project_name):
+    today = datetime.now().strftime('%Y-%m-%d')
+    return f"Project Status Report – {project_name} – {today}"
 
 def generate_psr_report(df_proj, tpl_bytes):
     first = df_proj.iloc[0]
@@ -282,7 +282,7 @@ def generate_psr_report(df_proj, tpl_bytes):
         'Report Period': f"{start:%d-%b-%Y} to {end:%d-%b-%Y}" if pd.notnull(start) else '',
         'Highlights': first.get('Highlights', ''),
         'Milestones': first.get('Milestones', ''),
-        'Footer': get_footer(proj_name, df_proj['Date']),
+        'Footer': get_footer(proj_name),
     }
     doc = Document(BytesIO(tpl_bytes))
     doc = replace_placeholders_preserve_format(doc, mapping)
