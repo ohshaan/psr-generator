@@ -28,7 +28,6 @@ def robust_read_file(uploaded_file):
     uploaded_file.seek(0)
     return pd.read_csv(uploaded_file, encoding=detected)
 
-
 def group_activities(df_proj):
     """Group & dedupe activities by Task Reference Number in date order."""
     df = df_proj.copy()
@@ -71,7 +70,6 @@ def group_activities(df_proj):
         grouped[task_ref] = lines
 
     return grouped
-
 
 def replace_placeholders_preserve_format(doc, mapping):
     """
@@ -272,10 +270,9 @@ def insert_grouped_activities(doc, grouped):
 
     return doc
 
-
 def get_footer(project_name):
     today = datetime.now().strftime('%Y-%m-%d')
-    return f"Project Status Report – {project_name} – {today}"
+    return f"Project Status Report  –   / {project_name} - {today}"
 
 def generate_psr_report(df_proj, tpl_bytes):
     first = df_proj.iloc[0]
