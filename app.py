@@ -199,6 +199,17 @@ def replace_placeholders_preserve_format(doc, mapping):
 
     return doc
 
+def set_footer_for_all_sections(doc, footer_text):
+    for section in doc.sections:
+        footer = section.footer
+        # Remove all existing paragraphs in the footer
+        p_elements = list(footer._element.xpath('.//w:p'))
+        for p in p_elements:
+            p.getparent().remove(p)
+        # Add new footer paragraph
+        para = footer.add_paragraph(footer_text)
+        # (Optional) Style the footer here, e.g., para.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    return doc
 
 def insert_grouped_activities(doc, grouped):
     """
@@ -286,6 +297,7 @@ def generate_psr_report(df_proj, tpl_bytes):
     }
     doc = Document(BytesIO(tpl_bytes))
     doc = replace_placeholders_preserve_format(doc, mapping)
+    doc = set_footer_for_all_sections(doc, mapping['Footer'])  # <-- Ensures footer is always set
     grouped = group_activities(df_proj)
     doc = insert_grouped_activities(doc, grouped)
     out = BytesIO()
