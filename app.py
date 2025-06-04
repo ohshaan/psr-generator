@@ -130,9 +130,13 @@ def replace_placeholders_preserve_format(doc, mapping):
         replacements = []
         for key, val in mapping.items():
             placeholder = f"{{{key}}}"
-            idx = full_text.find(placeholder)
-            if idx != -1:
+            start = 0
+            while True:
+                idx = full_text.find(placeholder, start)
+                if idx == -1:
+                    break
                 replacements.append((idx, idx + len(placeholder), str(val)))
+                start = idx + len(placeholder)
 
         if not replacements:
             return  # no "{Key}" in this paragraph
