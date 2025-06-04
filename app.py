@@ -32,12 +32,18 @@ def group_activities(df_proj):
     """Group & dedupe activities by Task Reference Number in date order."""
     df = df_proj.copy()
     df['Date'] = pd.to_datetime(df['Date'], errors='coerce')
+    # Avoid using Series.replace with an empty string because it treats the
+    # pattern as a regular expression which would replace the empty string in
+    # every position of every value. Instead strip/clean first and then update
+    # only the rows that are actually empty.
     df['Task Reference Number'] = (
         df.get('Task Reference Number', '')
           .fillna('')
           .astype(str)
           .str.strip()
-          .replace('', 'No Reference')
+    )
+    df.loc[df['Task Reference Number'] == '', 'Task Reference Number'] = (
+        'No Reference'
     )
     buckets = {}
     for _, row in df.iterrows():
